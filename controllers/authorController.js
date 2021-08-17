@@ -1,23 +1,33 @@
-//link to author model
-const authors = require('../models/author')
+const mongoose = require ("mongoose")
 
-//handle the request to get all authors
-const getAllAuthors = (req,res)=>{
-    res.send(authors) //send list to browser
+const Author = mongoose.model("Author")
+
+const getAllAuthors = async (req,res) => {
+    try {
+        const authors = await Author.find()
+        return res.send(authors)
+    } catch (err) {
+        res.status (404)
+        return res,send("Database query failed")
+    }
+} 
+
+
+const getOneAuthor = async(req,res)=>{
+    try{
+        const oneAuthor = await Author.findOne({"authorID":req.params.id})
+            if (oneAuthor === null){
+                res.status(400)
+                return res.send("Author not found")
+            }
+            return res.send(oneAuthor)
+    } catch (err){
+        res.status(400)
+        return res.send("Database query failed")
+    }
 }
 
-//Function to handle a request to a particular author
-const getAuthorByID = (req,res)=>{
-    //search for author in the database via ID
-    const author = authors.find(author=>author.id === req.params.id)
-    if (author){
-        res.send(author)
-    }
-    else{
-        res.send('nothing is here')
-    }
-}
 module.exports = {
     getAllAuthors,
-    getAuthorByID
+    getOneAuthor
 }

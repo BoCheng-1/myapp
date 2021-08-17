@@ -10,7 +10,7 @@ const authorController = require('../controllers/authorController.js')
 authorRouter.get('/',authorController.getAllAuthors)
 
 //handle the search ID request
-authorRouter.get('/:id',authorController.getAuthorByID)
+authorRouter.get('/:authorID',authorController.getOneAuthor)
 
 //export the router
 module.exports = authorRouter
